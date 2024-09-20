@@ -36,20 +36,20 @@
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[ERROR] Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.107 s <<< FAILURE! - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
-[ERROR] selectArtistsWhoseNameHasAnAInIt  Time elapsed: 0.096 s  <<< ERROR!
+[ERROR] Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.097 s <<< FAILURE! - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
+[ERROR] selectArtistsWhoseNameHasAnAInIt  Time elapsed: 0.084 s  <<< ERROR!
 java.lang.RuntimeException: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
 	at edu.montana.csci.csci440.homeworks.hwk1.Homework1.selectArtistsWhoseNameHasAnAInIt(Homework1.java:20)
 Caused by: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
 	at edu.montana.csci.csci440.homeworks.hwk1.Homework1.selectArtistsWhoseNameHasAnAInIt(Homework1.java:20)
 
-[ERROR] selectTheTrackAndAlbumAndArtistForAllTracksLongerThanSixMinutes  Time elapsed: 0.003 s  <<< ERROR!
+[ERROR] selectTheTrackAndAlbumAndArtistForAllTracksLongerThanSixMinutes  Time elapsed: 0.001 s  <<< ERROR!
 java.lang.RuntimeException: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
 	at edu.montana.csci.csci440.homeworks.hwk1.Homework1.selectTheTrackAndAlbumAndArtistForAllTracksLongerThanSixMinutes(Homework1.java:48)
 Caused by: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
 	at edu.montana.csci.csci440.homeworks.hwk1.Homework1.selectTheTrackAndAlbumAndArtistForAllTracksLongerThanSixMinutes(Homework1.java:48)
 
-[ERROR] selectAllArtistsWithMoreThanOneAlbum  Time elapsed: 0.002 s  <<< ERROR!
+[ERROR] selectAllArtistsWithMoreThanOneAlbum  Time elapsed: 0.004 s  <<< ERROR!
 java.lang.RuntimeException: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
 	at edu.montana.csci.csci440.homeworks.hwk1.Homework1.selectAllArtistsWithMoreThanOneAlbum(Homework1.java:32)
 Caused by: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/db' does not exist
@@ -68,8 +68,8 @@ Caused by: java.sql.SQLException: path to 'db/chinook.db': '/Users/carson/Projec
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.492 s
-[INFO] Finished at: 2024-09-19T15:27:56-06:00
+[INFO] Total time:  1.593 s
+[INFO] Finished at: 2024-09-20T14:14:55-06:00
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.1:test (default-test) on project CSCI_440_Project: There are test failures.
 [ERROR] 
