@@ -32,7 +32,7 @@ public class Homework1 extends DBTest {
           SELECT *
           FROM artists
           JOIN albums on artists.ArtistId = albums.ArtistId
-          GROUP BY artists.ArtistId, artists.Name
+          GROUP BY artists.ArtistId
           HAVING COUNT(albums.AlbumId) > 1;
           """;
         List<Map<String, Object>> results = exec(query);
@@ -49,7 +49,9 @@ public class Homework1 extends DBTest {
         String query = """
                 SELECT tracks.Name as TrackName, albums.Title as AlbumTitle, artists.Name as ArtistsName
                 FROM tracks
-                -- NEED TO DO SOME JOINS HERE KIDS
+                JOIN albums on tracks.AlbumId = albums.AlbumId
+                JOIN artists on albums.ArtistId = artists.ArtistId
+                WHERE tracks.Milliseconds > 360000;
                 """;
         List<Map<String, Object>> results = exec(query);
 
