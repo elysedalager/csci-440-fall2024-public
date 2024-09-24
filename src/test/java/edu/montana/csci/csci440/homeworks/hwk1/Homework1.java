@@ -29,7 +29,7 @@ public class Homework1 extends DBTest {
      */
     void selectAllArtistsWithMoreThanOneAlbum(){
         String query = """
-          SELECT * 
+          SELECT *
           FROM artists
           JOIN albums on artists.ArtistId = albums.ArtistId
           GROUP BY artists.ArtistId, artists.Name
