@@ -15,7 +15,9 @@ public class Homework1 extends DBTest {
      */
     void selectArtistsWhoseNameHasAnAInIt(){
         String query = """
-          SELECT * FROM artists
+          SELECT *
+          FROM artists
+          WHERE Name LIKE '%A%';
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(211, results.size());
@@ -27,7 +29,11 @@ public class Homework1 extends DBTest {
      */
     void selectAllArtistsWithMoreThanOneAlbum(){
         String query = """
-          SELECT * FROM artists
+          SELECT * 
+          FROM artists
+          JOIN albums on artists.ArtistId = albums.ArtistId
+          GROUP BY artists.ArtistId, artists.Name
+          HAVING COUNT(albums.AlbumId) > 1;
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(56, results.size());
