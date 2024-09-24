@@ -18,20 +18,14 @@
 [INFO] Copying 34 resources from src/main/resources to target/classes
 [INFO] 
 [INFO] --- compiler:3.11.0:compile (default-compile) @ CSCI_440_Project ---
-[INFO] Changes detected - recompiling the module! :source
-[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 24 source files with javac [debug target 15] to target/classes
-[WARNING] system modules path not set in conjunction with -source 15
+[INFO] Nothing to compile - all classes are up to date
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ CSCI_440_Project ---
 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 [INFO] Copying 3 resources from src/test/resources to target/test-classes
 [INFO] 
 [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ CSCI_440_Project ---
-[INFO] Changes detected - recompiling the module! :dependency
-[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 21 source files with javac [debug target 15] to target/test-classes
-[WARNING] system modules path not set in conjunction with -source 15
+[INFO] Nothing to compile - all classes are up to date
 [INFO] 
 [INFO] --- surefire:2.22.1:test (default-test) @ CSCI_440_Project ---
 [INFO] 
@@ -42,7 +36,7 @@
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.388 s - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.391 s - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -51,6 +45,6 @@ Resetting DB After Test...
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  2.700 s
-[INFO] Finished at: 2024-09-24T15:52:19-06:00
+[INFO] Total time:  1.709 s
+[INFO] Finished at: 2024-09-24T16:02:55-06:00
 [INFO] ------------------------------------------------------------------------
