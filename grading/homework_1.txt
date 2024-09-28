@@ -36,7 +36,7 @@
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.407 s - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.386 s - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -45,6 +45,6 @@ Resetting DB After Test...
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.810 s
-[INFO] Finished at: 2024-09-27T15:19:13-06:00
+[INFO] Total time:  1.787 s
+[INFO] Finished at: 2024-09-28T12:13:56-06:00
 [INFO] ------------------------------------------------------------------------
