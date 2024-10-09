@@ -17,7 +17,10 @@ public class Homework2 extends DBTest {
      */
     void selectEmployeeWhoHasBeenAtTheCompanyTheLongest(){
         String query = """
-          SELECT * FROM employees
+                SELECT *
+                FROM employees
+                WHERE employees.HireDate = (SELECT MIN(employees.HireDate)
+                                            FROM employees);
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(1, results.size());
@@ -31,7 +34,13 @@ public class Homework2 extends DBTest {
      */
     void selectEmployeeWhoHasMostReports(){
         String query = """
-          SELECT * FROM employees WHERE EmployeeId=(SELECT ReportsTo FROM employees LIMIT 1)
+                SELECT *
+                FROM employees
+                WHERE EmployeeId=(SELECT ReportsTo
+                                  FROM employees
+                                  GROUP BY ReportsTo
+                                  ORDER BY COUNT(ReportsTo) DESC
+                                  LIMIT 1);
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(1, results.size());
@@ -49,7 +58,11 @@ public class Homework2 extends DBTest {
      */
     void bestSellingGenres(){
         String query = """
-          SELECT * FROM genres
+                SELECT genres.GenreId, genres.Name, COUNT(*) as Sales
+                FROM genres
+                JOIN tracks ON genres.GenreId = tracks.GenreId
+                JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId
+                GROUP BY genres.GenreId;
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(24, results.size());
