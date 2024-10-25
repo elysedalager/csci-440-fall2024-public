@@ -16,7 +16,7 @@ public class Artist extends Model {
     public Artist() {
     }
 
-    private Artist(ResultSet results) throws SQLException {
+    public Artist(ResultSet results) throws SQLException {
         name = results.getString("Name");
         artistId = results.getLong("ArtistId");
     }

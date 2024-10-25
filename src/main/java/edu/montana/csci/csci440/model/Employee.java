@@ -22,7 +22,7 @@ public class Employee extends Model {
         // new employee for insert
     }
 
-    private Employee(ResultSet results) throws SQLException {
+    public Employee(ResultSet results) throws SQLException {
         firstName = results.getString("FirstName");
         lastName = results.getString("LastName");
         email = results.getString("Email");

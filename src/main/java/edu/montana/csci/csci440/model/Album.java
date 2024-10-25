@@ -20,7 +20,7 @@ public class Album extends Model {
     public Album() {
     }
 
-    private Album(ResultSet results) throws SQLException {
+    public Album(ResultSet results) throws SQLException {
         title = results.getString("Title");
         albumId = results.getLong("AlbumId");
         artistId = results.getLong("ArtistId");
@@ -95,9 +95,11 @@ public class Album extends Model {
     public static List<Album> all(int page, int count) {
         try {
             try(Connection connect = DB.connect();
-                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM albums  LIMIT ?")) {
+                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM albums LIMIT ? OFFSET ?")) {
                 ArrayList<Album> result = new ArrayList<>();
+                int offset = (page == 0) ? (page * count) : (page - 1) * count;
                 stmt.setInt(1, count);
+                stmt.setInt(2, offset);
                 ResultSet resultSet = stmt.executeQuery();
                 while (resultSet.next()) {
                     result.add(new Album(resultSet));
@@ -106,6 +108,25 @@ public class Album extends Model {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean  update() {
+        if (verify()) {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "UPDATE albums SET Title=?, ArtistId=? WHERE AlbumId=?")) {
+                stmt.setString(1, this.getTitle());
+                stmt.setLong(2, this.getArtistId());
+                stmt.setLong(3, this.getAlbumId());
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
         }
     }
 

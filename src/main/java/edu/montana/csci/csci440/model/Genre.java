@@ -15,7 +15,7 @@ public class Genre extends Model {
     private Long genreId;
     private String name;
 
-    private Genre(ResultSet results) throws SQLException {
+    public Genre(ResultSet results) throws SQLException {
         name = results.getString("Name");
         genreId = results.getLong("GenreId");
     }

@@ -16,7 +16,7 @@ public class MediaType extends Model {
     private Long mediaTypeId;
     private String name;
 
-    private MediaType(ResultSet results) throws SQLException {
+    public MediaType(ResultSet results) throws SQLException {
         name = results.getString("Name");
         mediaTypeId = results.getLong("MediaTypeId");
     }
