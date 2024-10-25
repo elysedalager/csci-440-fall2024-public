@@ -36,43 +36,15 @@
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[ERROR] Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.433 s <<< FAILURE! - in edu.montana.csci.csci440.homeworks.hwk2.Homework2
-[ERROR] selectEmployeeWhoHasBeenAtTheCompanyTheLongest  Time elapsed: 0.42 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <1> but was: <8>
-	at edu.montana.csci.csci440.homeworks.hwk2.Homework2.selectEmployeeWhoHasBeenAtTheCompanyTheLongest(Homework2.java:23)
-
-[ERROR] bestSellingGenres  Time elapsed: 0.003 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <24> but was: <25>
-	at edu.montana.csci.csci440.homeworks.hwk2.Homework2.bestSellingGenres(Homework2.java:55)
-
-[ERROR] selectEmployeeWhoHasMostReports  Time elapsed: 0.003 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
-	at edu.montana.csci.csci440.homeworks.hwk2.Homework2.selectEmployeeWhoHasMostReports(Homework2.java:37)
-
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.36 s - in edu.montana.csci.csci440.homeworks.hwk2.Homework2
 [INFO] 
 [INFO] Results:
 [INFO] 
-[ERROR] Failures: 
-[ERROR]   Homework2.bestSellingGenres:55 expected: <24> but was: <25>
-[ERROR]   Homework2.selectEmployeeWhoHasBeenAtTheCompanyTheLongest:23 expected: <1> but was: <8>
-[ERROR]   Homework2.selectEmployeeWhoHasMostReports:37 expected: <1> but was: <0>
-[INFO] 
-[ERROR] Tests run: 3, Failures: 3, Errors: 0, Skipped: 0
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.941 s
-[INFO] Finished at: 2024-10-09T14:15:58-06:00
+[INFO] Total time:  1.680 s
+[INFO] Finished at: 2024-10-12T02:57:12-06:00
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.1:test (default-test) on project CSCI_440_Project: There are test failures.
-[ERROR] 
-[ERROR] Please refer to /Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/target/surefire-reports for the individual test results.
-[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
-[ERROR] -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
