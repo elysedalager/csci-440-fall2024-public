@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Customer extends Model {
         lastName = results.getString("LastName");
         customerId = results.getLong("CustomerId");
         supportRepId = results.getLong("SupportRepId");
+        email = results.getString("Email");
     }
 
     public String getFirstName() {
@@ -60,14 +62,29 @@ public class Customer extends Model {
     }
 
     public static List<Customer> all(int page, int count) {
-        return Collections.emptyList();
+        try {
+            try(Connection connect = DB.connect();
+                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM customers LIMIT ? OFFSET ?")) {
+                ArrayList<Customer> result = new ArrayList<>();
+                int offset = (page == 0) ? (page * count) : (page - 1) * count;
+                stmt.setInt(1, count);
+                stmt.setInt(2, offset);
+                ResultSet resultSet = stmt.executeQuery();
+                while (resultSet.next()) {
+                    result.add(new Customer(resultSet));
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Customer find(long customerId) {
         try {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
-                         "SELECT * FROM Customers WHERE CustomerId = ?")) {
+                         "SELECT * FROM customers WHERE CustomerId = ?")) {
                 stmt.setLong(1, customerId);
                 ResultSet resultSet = stmt.executeQuery();
                 if (resultSet.next()) {
