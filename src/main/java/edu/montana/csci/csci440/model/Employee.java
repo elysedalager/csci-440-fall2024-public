@@ -15,7 +15,7 @@ public class Employee extends Model {
     private Long reportsTo;
     private String firstName;
     private String lastName;
-    private String email;
+    static String email;
     private String title;
 
     public Employee() {
@@ -42,9 +42,12 @@ public class Employee extends Model {
         if (firstName == null || "".equals(firstName)) {
             addError("FirstName can't be null or blank!");
         }
-        // TODO - add in additional validations:
-        //   last name can't be null or blank
-        //   email can't be null or blank and must contain an @
+        if (lastName == null || "".equals(lastName)){
+            addError("LastName can't be null or blank!");
+        }
+        if (email == null || "".equals(email) || !email.contains("@")){
+            addError("Email can't be null or blank and must contian an @ symbol!");
+        }
         return !hasErrors();
     }
 
@@ -154,9 +157,11 @@ public class Employee extends Model {
     public static List<Employee> all(int page, int count) {
          try {
             try(Connection connect = DB.connect();
-                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM employees LIMIT ?")) {
+                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM employees LIMIT ? OFFSET ?")) {
                 ArrayList<Employee> result = new ArrayList<>();
+                int offset = (page == 0) ? (page * count) : (page - 1) * count;
                 stmt.setInt(1, count);
+                stmt.setInt(2, offset);
                 ResultSet resultSet = stmt.executeQuery();
                 while (resultSet.next()) {
                     result.add(new Employee(resultSet));
@@ -169,7 +174,21 @@ public class Employee extends Model {
     }
 
     public static Employee findByEmail(String newEmailAddress) {
-        throw new UnsupportedOperationException("Implement me");
+        try {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "SELECT * FROM Employees WHERE Email = ?")) {
+                stmt.setString(1, newEmailAddress);
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()) {
+                    return new Employee(resultSet);
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Employee find(long employeeId) {
