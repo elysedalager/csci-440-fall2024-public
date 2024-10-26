@@ -49,7 +49,7 @@ public class Employee extends Model {
     }
 
     @Override
-    public boolean  update() {
+    public boolean update() {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(

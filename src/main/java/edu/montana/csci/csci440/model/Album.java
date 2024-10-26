@@ -80,10 +80,10 @@ public class Album extends Model {
     public boolean verify() {
         _errors.clear();
         if (getTitle() == null) {
-            _errors.add("Title was null");
+            _errors.add("Title is required");
         }
         if (artistId == null) {
-            _errors.add("ArtistId was null");
+            _errors.add("ArtistId is required");
         }
         return _errors.isEmpty();
     }
@@ -112,7 +112,7 @@ public class Album extends Model {
     }
 
     @Override
-    public boolean  update() {
+    public boolean update() {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
