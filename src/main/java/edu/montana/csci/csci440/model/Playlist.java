@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,11 +47,40 @@ public class Playlist extends Model {
     }
 
     public static List<Playlist> all(int page, int count) {
-        return Collections.emptyList();
+        try {
+            try(Connection connect = DB.connect();
+                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM playlists LIMIT ? OFFSET ?")) {
+                ArrayList<Playlist> result = new ArrayList<>();
+                int offset = (page == 0) ? (page * count) : (page - 1) * count;
+                stmt.setInt(1, count);
+                stmt.setInt(2, offset);
+                ResultSet resultSet = stmt.executeQuery();
+                while (resultSet.next()) {
+                    result.add(new Playlist(resultSet));
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Playlist find(int i) {
-        return new Playlist();
+        try {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "SELECT * FROM playlists WHERE PlaylistId = ?")) {
+                stmt.setLong(1, i);
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()) {
+                    return new Playlist(resultSet);
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
