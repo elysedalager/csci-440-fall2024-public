@@ -4,10 +4,8 @@ import edu.montana.csci.csci440.util.DB;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.Collections;
+import java.util.*;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Invoice extends Model {
 
@@ -97,10 +95,39 @@ public class Invoice extends Model {
     }
 
     public static List<Invoice> all(int page, int count) {
-        return Collections.emptyList();
+        try {
+            try(Connection connect = DB.connect();
+                PreparedStatement stmt = connect.prepareStatement("SELECT  * FROM invoices LIMIT ? OFFSET ?")) {
+                ArrayList<Invoice> result = new ArrayList<>();
+                int offset = (page == 0) ? (page * count) : (page - 1) * count;
+                stmt.setInt(1, count);
+                stmt.setInt(2, offset);
+                ResultSet resultSet = stmt.executeQuery();
+                while (resultSet.next()) {
+                    result.add(new Invoice(resultSet));
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Invoice find(long invoiceId) {
-        return new Invoice();
+        try {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "SELECT * FROM invoices WHERE InvoiceId = ?")) {
+                stmt.setLong(1, invoiceId);
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()) {
+                    return new Invoice(resultSet);
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
