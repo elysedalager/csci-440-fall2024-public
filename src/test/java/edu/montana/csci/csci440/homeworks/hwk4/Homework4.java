@@ -42,27 +42,34 @@ public class Homework4 extends DBTest {
     }
 
     private void transferMilliseconds(Track from, Track to, int milliseconds, boolean throwException) throws SQLException {
-        try(Connection connection = DB.connect()){
+        try (Connection connection = DB.connect()) {
             connection.setAutoCommit(false);
 
-            PreparedStatement subtract = connection.prepareStatement("TODO");
-            subtract.setLong(1, 0);
-            subtract.setLong(2, 0);
-            subtract.execute();
+            try {
+                // Subtract milliseconds from the "from" track
+                PreparedStatement subtract = connection.prepareStatement("UPDATE tracks SET milliseconds = milliseconds - ? WHERE TrackId = ?");
+                subtract.setInt(1, milliseconds);
+                subtract.setLong(2, from.getTrackId());
+                subtract.executeUpdate();
 
-            if(throwException) {
-                throw new RuntimeException();
+                if (throwException) {
+                    throw new RuntimeException();
+                }
+
+                // Add milliseconds to the "to" track
+                PreparedStatement add = connection.prepareStatement("UPDATE tracks SET milliseconds = milliseconds + ? WHERE TrackId = ?");
+                add.setInt(1, milliseconds);
+                add.setLong(2, to.getTrackId());
+                add.executeUpdate();
+
+                connection.commit();
+            } catch (SQLException | RuntimeException e) {
+                // Roll back the transaction in case any of the updates fail
+                connection.rollback();
+                throw e; // Re-throw the exception to signal failure
             }
-
-            PreparedStatement add = connection.prepareStatement("TODO");
-            add.setLong(1, 0);
-            add.setLong(2, 0);
-            add.execute();
-
-            // commit with the connection
         }
     }
-
 
     @Test
     /*
@@ -96,7 +103,8 @@ public class Homework4 extends DBTest {
      */
     public void allInvoicesIn2011() {
         String query = """
-          SELECT * from invoices
+          SELECT * FROM invoices
+          WHERE strftime('%Y', InvoiceDate) = '2011'
           """;
         List<Map<String, Object>> results = exec(query);
         assertEquals(83, results.size());
