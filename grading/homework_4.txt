@@ -36,40 +36,15 @@
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[ERROR] Tests run: 3, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 0.419 s <<< FAILURE! - in edu.montana.csci.csci440.homeworks.hwk4.Homework4
-[ERROR] useATransactionToSafelyMoveMillisecondsFromOneTrackToAnother  Time elapsed: 0.008 s  <<< ERROR!
-org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (near "TODO": syntax error)
-	at edu.montana.csci.csci440.homeworks.hwk4.Homework4.transferMilliseconds(Homework4.java:48)
-	at edu.montana.csci.csci440.homeworks.hwk4.Homework4.useATransactionToSafelyMoveMillisecondsFromOneTrackToAnother(Homework4.java:35)
-
-[ERROR] allInvoicesIn2011  Time elapsed: 0.015 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <83> but was: <412>
-	at edu.montana.csci.csci440.homeworks.hwk4.Homework4.allInvoicesIn2011(Homework4.java:102)
-
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.364 s - in edu.montana.csci.csci440.homeworks.hwk4.Homework4
 [INFO] 
 [INFO] Results:
 [INFO] 
-[ERROR] Failures: 
-[ERROR]   Homework4.allInvoicesIn2011:102 expected: <83> but was: <412>
-[ERROR] Errors: 
-[ERROR]   Homework4.useATransactionToSafelyMoveMillisecondsFromOneTrackToAnother:35->transferMilliseconds:48 » SQLite
-[INFO] 
-[ERROR] Tests run: 3, Failures: 1, Errors: 1, Skipped: 0
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.837 s
-[INFO] Finished at: 2024-11-04T11:24:14-07:00
+[INFO] Total time:  1.716 s
+[INFO] Finished at: 2024-11-09T02:25:16-07:00
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.1:test (default-test) on project CSCI_440_Project: There are test failures.
-[ERROR] 
-[ERROR] Please refer to /Users/carson/Projects/msu/classes/current/csci-440-fall2024/grading/scripts/repos/dalager_elyse/target/surefire-reports for the individual test results.
-[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
-[ERROR] -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
