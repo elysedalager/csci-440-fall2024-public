@@ -28,12 +28,23 @@ public class Homework5 extends DBTest {
     public void selectPopularTracksAndTheirAlbums() throws SQLException {
 
         // HINT: join to invoice items and do a group by/having to get the right answer
-        List<Map<String, Object>> tracks = exec("");
+        List<Map<String, Object>> tracks = exec("SELECT *\n" +
+                "FROM tracks\n" +
+                "JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId\n" +
+                "GROUP BY tracks.TrackId\n" +
+                "HAVING COUNT(invoice_items.InvoiceLineId) > 1;");
         assertEquals(256, tracks.size());
 
         // HINT: join to tracks and invoice items and do a group by/having to get the right answer
         //       note: you will need to use the DISTINCT operator to get the right result!
-        List<Map<String, Object>> albums = exec("");
+        List<Map<String, Object>> albums = exec("SELECT DISTINCT *\n" +
+                "FROM albums\n" +
+                "JOIN tracks ON albums.AlbumId = tracks.AlbumId\n" +
+                "JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId\n" +
+                "GROUP BY albums.AlbumId\n" +
+                "HAVING SUM((SELECT COUNT(*)\n" +
+                "            FROM invoice_items\n" +
+                "            WHERE invoice_items.TrackId = tracks.TrackId) > 1) > 0;");
         assertEquals(166, albums.size());
     }
 
@@ -46,7 +57,16 @@ public class Homework5 extends DBTest {
      * */
     public void selectCustomersMeetingCriteria() throws SQLException {
         // HINT: join to invoice items and do a group by/having to get the right answer
-        List<Map<String, Object>> tracks = exec("" );
+        List<Map<String, Object>> tracks = exec("SELECT DISTINCT customers.Email\n" +
+                "FROM customers\n" +
+                "JOIN employees ON customers.SupportRepId = employees.EmployeeId\n" +
+                "WHERE employees.FirstName = 'Jane' AND employees.LastName = 'Peacock' AND customers.CustomerId IN (\n" +
+                "    SELECT DISTINCT invoices.CustomerId\n" +
+                "    FROM invoices\n" +
+                "    JOIN invoice_items ON invoices.InvoiceId = invoice_items.InvoiceId\n" +
+                "    JOIN tracks ON invoice_items.TrackId = tracks.TrackId\n" +
+                "    JOIN genres ON tracks.GenreId = genres.GenreId\n" +
+                "    WHERE genres.Name = 'Rock');" );
         assertEquals(21, tracks.size());
     }
 
