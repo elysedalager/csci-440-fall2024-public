@@ -72,17 +72,33 @@ public class Track extends Model {
 
     public static Long count() {
 
-        // write query to count number of tracks
-        // check the redis cache
-        // if there is a value there return it
-        // else issue the query
-        //   save the count to redis
-        //   return the count
+        // automatically connects to redis instance running on local machine
+        Jedis jedis = new Jedis();
+        if(jedis.exists(REDIS_CACHE_KEY)) {
+            return Long.parseLong(jedis.get(REDIS_CACHE_KEY));
+        }
 
+        // store count in redis, so we don't have to access the database again
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT COUNT(*)\n" +
+                             "FROM tracks;")) {
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                long count = resultSet.getLong(1);
+                jedis.set(REDIS_CACHE_KEY, String.valueOf(count));
+                return count;
+            } else {
+                throw new IllegalStateException("Could not find a count.");
+            }
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
 
-        // TODO - also invalidate cache
-
-        return 0l;
+        // cache invalidation scenario: if someone does something to change the count of the number of tracks in the database
+        // then, clear (delete) it
+        // look up redis documentation for this
+        // going to have to clear this value in the couple of places that changes the count of the number of tracks
     }
 
     public Album getAlbum() {
@@ -278,6 +294,10 @@ public class Track extends Model {
                 stmt.setBigDecimal(5, this.getUnitPrice());
                 stmt.executeUpdate();
                 this.trackId = DB.getLastID(conn);
+
+                Jedis jedis = new Jedis();
+                jedis.del(REDIS_CACHE_KEY);
+
                 return true;
             } catch (SQLException sqlException) {
                 throw new RuntimeException(sqlException);
@@ -302,6 +322,36 @@ public class Track extends Model {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void delete() {
+        List<Playlist> playlists = this.getPlaylists();
+        for(Playlist p : playlists) {
+            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM playlist_track WHERE TrackId=?")) {
+                stmt.setLong(1, getTrackId());
+                stmt.executeUpdate();
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        }
+
+        try(Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM invoice_items WHERE TrackId=?")) {
+            stmt.setLong(1, getTrackId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+
+        try(Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM tracks WHERE TrackId=?")) {
+            stmt.setLong(1, getTrackId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+
+        Jedis jedis = new Jedis();
+        jedis.del(REDIS_CACHE_KEY);
     }
 
     public static List<Track> forAlbum(Long albumId) {
