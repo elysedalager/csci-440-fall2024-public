@@ -1,6 +1,7 @@
 package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
+import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -15,7 +16,7 @@ public class Employee extends Model {
     private Long reportsTo;
     private String firstName;
     private String lastName;
-    static String email;
+    private String email;
     private String title;
 
     public Employee() {
@@ -31,44 +32,44 @@ public class Employee extends Model {
         title = results.getString("Title");
     }
 
+    // result of an aggregate query
+    // roll up all sales for each employee in a query
     public static List<Employee.SalesSummary> getSalesSummaries() {
-        //TODO - a GROUP BY query to determine the sales (look at the invoices table), using the SalesSummary class
-        return Collections.emptyList();
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT employees.FirstName, employees.LastName, employees.Email, COUNT(InvoiceId) as SalesCount, SUM(Total) as SalesTotal " +
+                             "FROM employees\n" +
+                             "JOIN customers on employees.EmployeeId = customers.SupportRepId\n" +
+                             "JOIN invoices on customers.CustomerId = invoices.CustomerId\n" +
+                             "GROUP BY EmployeeID"
+             )) {
+            ResultSet results = stmt.executeQuery();
+            List<Employee.SalesSummary> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Employee.SalesSummary(results));
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 
     @Override
     public boolean verify() {
         _errors.clear(); // clear any existing errors
-        if (firstName == null || "".equals(firstName)) {
+        if (firstName == null || "".equals(firstName)){
             addError("FirstName can't be null or blank!");
         }
         if (lastName == null || "".equals(lastName)){
             addError("LastName can't be null or blank!");
         }
-        if (email == null || "".equals(email) || !email.contains("@")){
-            addError("Email can't be null or blank and must contian an @ symbol!");
+        if (getEmail() == null || "".equals(getEmail())){
+            addError("Email can't be null or blank!");
+        }
+        else if (!getEmail().contains("@")){
+            addError("Email must contain an @");
         }
         return !hasErrors();
-    }
-
-    @Override
-    public boolean update() {
-        if (verify()) {
-            try (Connection conn = DB.connect();
-                 PreparedStatement stmt = conn.prepareStatement(
-                         "UPDATE employees SET FirstName=?, LastName=?, Email=? WHERE EmployeeId=?")) {
-                stmt.setString(1, this.getFirstName());
-                stmt.setString(2, this.getLastName());
-                stmt.setString(3, this.getEmail());
-                stmt.setLong(4, this.getEmployeeId());
-                stmt.executeUpdate();
-                return true;
-            } catch (SQLException sqlException) {
-                throw new RuntimeException(sqlException);
-            }
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -82,6 +83,26 @@ public class Employee extends Model {
                 stmt.setString(3, this.getEmail());
                 stmt.executeUpdate();
                 employeeId = DB.getLastID(conn);
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update() {
+        if (verify()) {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "UPDATE employees SET FirstName=?, LastName=?, Email=? WHERE EmployeeId=?")) {
+                stmt.setString(1, this.getFirstName());
+                stmt.setString(2, this.getLastName());
+                stmt.setString(3, this.getEmail());
+                stmt.setLong(4, this.getEmployeeId());
+                stmt.executeUpdate();
                 return true;
             } catch (SQLException sqlException) {
                 throw new RuntimeException(sqlException);
@@ -147,6 +168,18 @@ public class Employee extends Model {
         }
     }
     public Employee getBoss() {
+        if(reportsTo != null){
+            try(Connection connect = DB.connect();
+                PreparedStatement stmt = connect.prepareStatement("SELECT * FROM employees WHERE EmployeeId = ?")){
+                stmt.setLong(1, reportsTo);
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()){
+                    return new Employee(resultSet);
+                }
+            } catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
         return null;
     }
 
@@ -214,7 +247,7 @@ public class Employee extends Model {
     }
 
     public void setReportsTo(Employee employee) {
-        // TODO implement
+        reportsTo = employee.getEmployeeId();
     }
 
     public static class SalesSummary {
