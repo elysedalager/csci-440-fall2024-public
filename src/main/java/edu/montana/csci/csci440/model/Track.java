@@ -22,8 +22,8 @@ public class Track extends Model {
     private Long milliseconds;
     private Long bytes;
     private BigDecimal unitPrice;
-    private String artistName;
-    private String albumTitle;
+    private Artist artistCache;
+    private Album albumCache;
 
     public static final String REDIS_CACHE_KEY = "cs440-tracks-count-cache";
 
@@ -43,9 +43,8 @@ public class Track extends Model {
         trackId = results.getLong("TrackId");
         albumId = results.getLong("AlbumId");
         mediaTypeId = results.getLong("MediaTypeId");
-        genreId = results.getLong("GenreId");
-        artistName = results.getString("ArtistName");
-        albumTitle = results.getString("AlbumTitle");
+        albumCache = getAlbum();
+        artistCache = albumCache.getArtist();
     }
 
     public static Track find(long trackId) {
@@ -202,17 +201,17 @@ public class Track extends Model {
     }
 
     public String getArtistName() {
-        return artistName;
+        return artistCache.getName();
     }
 
     public String getAlbumTitle() {
-        return albumTitle;
+        return albumCache.getTitle();
     }
 
     @Override
     public boolean verify() {
         _errors.clear();
-        if (getName() == null) {
+        if (getName() == null || getName().isEmpty()) {
             _errors.add("Name is required");
         }
         if (albumId == null) {

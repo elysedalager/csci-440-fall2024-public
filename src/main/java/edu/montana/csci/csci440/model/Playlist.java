@@ -29,7 +29,7 @@ public class Playlist extends Model {
         try {
             try (Connection connect = DB.connect();
                  PreparedStatement stmt = connect.prepareStatement(
-                         "SELECT *" +
+                         "SELECT * " +
                                  "FROM tracks " +
                                  "JOIN playlist_track ON tracks.TrackId = playlist_track.TrackId " +
                                  "WHERE playlist_track.PlaylistId = ? " +
@@ -100,5 +100,4 @@ public class Playlist extends Model {
             throw new RuntimeException(e);
         }
     }
-
 }
