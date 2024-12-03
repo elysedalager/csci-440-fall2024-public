@@ -112,7 +112,25 @@ public class Track extends Model {
         return null;
     }
     public List<Playlist> getPlaylists(){
-        return Collections.emptyList();
+        try {
+            try (Connection connect = DB.connect();
+                 PreparedStatement stmt = connect.prepareStatement(
+                         "SELECT * " +
+                                 "FROM playlists " +
+                                 "JOIN playlist_track ON playlists.PlaylistId = playlist_track.PlaylistId " +
+                                 "WHERE playlist_track.TrackId = ?")) {
+                stmt.setLong(1, this.trackId); // Assuming trackId is the ID of the current track
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    List<Playlist> playlists = new ArrayList<>();
+                    while (resultSet.next()) {
+                        playlists.add(new Playlist(resultSet));
+                    }
+                    return playlists;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Long getTrackId() {
@@ -375,7 +393,8 @@ public class Track extends Model {
                         "FROM Tracks " +
                         "JOIN Albums ON Tracks.AlbumId = Albums.AlbumId " +
                         "JOIN Artists ON Albums.ArtistId = Artists.ArtistId " +
-                        "LIMIT ? OFFSET ?")) {
+                        "ORDER BY " + orderBy +
+                                " LIMIT ? OFFSET ?")) {
                 ArrayList<Track> result = new ArrayList<>();
                 int offset = (page == 0) ? (page * count) : (page - 1) * count;
                 stmt.setInt(1, count);

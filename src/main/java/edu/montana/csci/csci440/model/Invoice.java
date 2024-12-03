@@ -23,6 +23,7 @@ public class Invoice extends Model {
 
     public Invoice(ResultSet results) throws SQLException {
         billingAddress = results.getString("BillingAddress");
+        billingCity = results.getString("BillingCity");
         billingState = results.getString("BillingState");
         billingCountry = results.getString("BillingCountry");
         billingPostalCode = results.getString("BillingPostalCode");
