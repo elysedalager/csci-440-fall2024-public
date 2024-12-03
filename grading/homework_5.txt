@@ -32,19 +32,18 @@
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running edu.montana.csci.csci440.homeworks.hwk1.Homework1
+[INFO] Running edu.montana.csci.csci440.homeworks.hwk5.Homework5
 Resetting DB After Test...
 Resetting DB After Test...
-Resetting DB After Test...
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.354 s - in edu.montana.csci.csci440.homeworks.hwk1.Homework1
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.424 s - in edu.montana.csci.csci440.homeworks.hwk5.Homework5
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.723 s
-[INFO] Finished at: 2024-11-23T01:45:53-07:00
+[INFO] Total time:  1.828 s
+[INFO] Finished at: 2024-11-23T07:57:26-07:00
 [INFO] ------------------------------------------------------------------------
