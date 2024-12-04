@@ -117,6 +117,24 @@ public class Artist extends Model {
         return false;
     }
 
+    @Override
+    public void delete() {
+
+        // albums
+        List<Album> albums = this.getAlbums();
+        for (Album a : albums) {
+            a.delete();
+        }
+
+        String query = "DELETE FROM artists WHERE ArtistId=?";
+        try(Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setLong(1, getArtistId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+    }
+
     public static Artist find(long i) {
         try {
             try (Connection conn = DB.connect();

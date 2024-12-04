@@ -1,6 +1,7 @@
 package edu.montana.csci.csci440.controller;
 
 import edu.montana.csci.csci440.model.Album;
+import edu.montana.csci.csci440.model.Artist;
 import edu.montana.csci.csci440.util.Web;
 
 import java.util.List;
@@ -18,12 +19,13 @@ public class AlbumsController extends BaseController {
 
         post("/albums/new", (req, resp) -> {
             Album album = new Album();
-            // TODO populate the album
+            album.setTitle(req.queryParams("Title"));
+            album.setArtist(Artist.find(Long.parseLong(req.queryParams("ArtistId"))));
             if (album.create()) {
-                Web.showMessage("Created A Album!");
+                Web.showMessage("Created an Album!");
                 return Web.redirect("/albums/" + album.getAlbumId());
             } else {
-                Web.showErrorMessage("Could Not Create A Album!");
+                Web.showErrorMessage("Could Not Create an Album!");
                 return renderTemplate("templates/albums/new.vm",
                         "album", album);
             }
@@ -49,9 +51,8 @@ public class AlbumsController extends BaseController {
 
         post("/albums/:id", (req, resp) -> {
             Album album = Album.find(asInt(req.params(":id")));
-
-            // TODO update the album fields
-
+            album.setTitle(req.queryParams("Title"));
+            album.setArtist(Artist.find(Long.parseLong(req.queryParams("ArtistId"))));
             if (album.update()) {
                 Web.showMessage("Updated Album!");
                 return Web.redirect("/albums/" + album.getAlbumId());

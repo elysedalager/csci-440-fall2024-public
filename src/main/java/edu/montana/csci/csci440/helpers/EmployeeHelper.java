@@ -7,7 +7,6 @@ import java.util.*;
 public class EmployeeHelper {
 
     public static String makeEmployeeTree() {
-        // TODO, change this to use a single query operation to get all employees
         Employee boss = Employee.find(1); // root boss
         // and use this data structure to maintain reference information needed to build the tree structure
         Map<Long, List<Employee>> employeeMap = new HashMap<>();
@@ -23,8 +22,6 @@ public class EmployeeHelper {
         return "<ul>" + makeTree(Objects.requireNonNull(boss), employeeMap) + "</ul>";
     }
 
-    // TODO - currently this method just uses the employee.getReports() function, which
-    //  issues a query.  Change that to use the employeeMap variable instead
     public static String makeTree(Employee employee, Map<Long, List<Employee>> employeeMap) {
         String list = "<li><a href='/employees/" + employee.getEmployeeId() + "'>"
                 + employee.getEmail() + "</a><ul>";

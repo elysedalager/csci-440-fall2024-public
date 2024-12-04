@@ -66,7 +66,7 @@ public class ArtistController extends BaseController {
         get("/artists/:id/delete", (req, resp) -> {
             Artist artist = Artist.find(asInt(req.params(":id")));
             artist.delete();
-            Web.showMessage("Deleted Artist " + artist.getName());
+            Web.showMessage("Deleted ArFserverOtist " + artist.getName());
             return Web.redirect("/artists");
         });
     }

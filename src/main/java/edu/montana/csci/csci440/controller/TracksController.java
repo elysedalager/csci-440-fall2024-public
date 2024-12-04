@@ -1,7 +1,9 @@
 package edu.montana.csci.csci440.controller;
 
+import edu.montana.csci.csci440.model.Artist;
 import edu.montana.csci.csci440.model.Track;
 import edu.montana.csci.csci440.util.Web;
+import edu.montana.csci.csci440.model.Album;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,9 +21,10 @@ public class TracksController extends BaseController {
 
         post("/tracks/new", (req, resp) -> {
             Track track = new Track();
-
-            // TODO update the track fields
-
+            track.setName(req.queryParams("Name"));
+            track.setMilliseconds(Long.parseLong(req.queryParams("Milliseconds")));
+            track.setBytes(Long.parseLong(req.queryParams("Bytes")));
+            track.setUnitPrice(new BigDecimal(req.queryParams("UnitPrice")));
             if (track.create()) {
                 Web.showMessage("Created A Track!");
                 return Web.redirect("/tracks/" + track.getTrackId());

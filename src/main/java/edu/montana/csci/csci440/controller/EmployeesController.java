@@ -19,7 +19,10 @@ public class EmployeesController extends BaseController {
 
         post("/employees/new", (req, resp) -> {
             Employee emp = new Employee();
-            // TODO populate the employee
+            emp.setFirstName(req.queryParams("FirstName"));
+            emp.setLastName(req.queryParams("LastName"));
+            emp.setEmail(req.queryParams("Email"));
+            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("ReportsTo"))));
             if (emp.create()) {
                 Web.showMessage("Created An Employee!");
                 return Web.redirect("/employees/" + emp.getEmployeeId());
@@ -64,7 +67,10 @@ public class EmployeesController extends BaseController {
 
         post("/employees/:id", (req, resp) -> {
             Employee emp = Employee.find(asInt(req.params(":id")));
-            // TODO update the employee
+            emp.setFirstName(req.queryParams("FirstName"));
+            emp.setLastName(req.queryParams("LastName"));
+            emp.setEmail(req.queryParams("Email"));
+            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("ReportsTo"))));
             if (emp.update()) {
                 Web.showMessage("Updated Employee!");
                 return Web.redirect("/employees/" + emp.getEmployeeId());
