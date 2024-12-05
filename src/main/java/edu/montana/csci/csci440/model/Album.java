@@ -130,6 +130,21 @@ public class Album extends Model {
         }
     }
 
+    @Override
+    public void delete() {
+        List<Track> tracks = this.getTracks();
+        for (Track t : tracks) {
+            t.delete();
+        }
+
+        try(Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM albums WHERE AlbumId=?")) {
+            stmt.setLong(1, getAlbumId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+    }
+
     public static Album find(long i) {
         try {
             try (Connection conn = DB.connect();

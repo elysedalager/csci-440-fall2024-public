@@ -22,7 +22,7 @@ public class EmployeesController extends BaseController {
             emp.setFirstName(req.queryParams("FirstName"));
             emp.setLastName(req.queryParams("LastName"));
             emp.setEmail(req.queryParams("Email"));
-            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("ReportsTo"))));
+            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("EmployeeId"))));
             if (emp.create()) {
                 Web.showMessage("Created An Employee!");
                 return Web.redirect("/employees/" + emp.getEmployeeId());
@@ -70,7 +70,7 @@ public class EmployeesController extends BaseController {
             emp.setFirstName(req.queryParams("FirstName"));
             emp.setLastName(req.queryParams("LastName"));
             emp.setEmail(req.queryParams("Email"));
-            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("ReportsTo"))));
+            emp.setReportsTo(Employee.find(Long.parseLong(req.queryParams("EmployeeId"))));
             if (emp.update()) {
                 Web.showMessage("Updated Employee!");
                 return Web.redirect("/employees/" + emp.getEmployeeId());

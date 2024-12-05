@@ -77,10 +77,11 @@ public class Employee extends Model {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
-                         "INSERT INTO employees (FirstName, LastName, Email) VALUES (?, ?, ?)")) {
+                         "INSERT INTO employees (FirstName, LastName, Email, ReportsTo) VALUES (?, ?, ?, ?)")) {
                 stmt.setString(1, this.getFirstName());
                 stmt.setString(2, this.getLastName());
                 stmt.setString(3, this.getEmail());
+                stmt.setLong(4, this.getReportsTo());
                 stmt.executeUpdate();
                 employeeId = DB.getLastID(conn);
                 return true;
@@ -114,6 +115,32 @@ public class Employee extends Model {
 
     @Override
     public void delete() {
+        List<Customer> customers = this.getCustomers();
+        for(Customer c : customers) {
+            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM customers WHERE SupportRepId=?")) {
+                stmt.setLong(1, getEmployeeId());
+                stmt.executeUpdate();
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        }
+
+        List<Employee> reports = this.getReports();
+        for(Employee e : reports) {
+            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM employees WHERE ReportsTo=?")) {
+                stmt.setLong(1, getEmployeeId());
+                stmt.executeUpdate();
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        }
+
+        try(Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM employees WHERE EmployeeId=?")) {
+            stmt.setLong(1, getEmployeeId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
     }
 
     public String getFirstName() {

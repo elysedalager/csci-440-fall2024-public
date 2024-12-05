@@ -1,0 +1,40 @@
+
+
+#if( $customer.hasErrors() )
+<div style="color:red">
+    <h4>Errors:</h4>
+    <ul>
+        #foreach( $error in $customer.Errors )
+            <li>$error</li>
+        #end
+    </ul>
+</div>
+#end
+
+<table>
+    <thead>
+    <tr>
+        <th>Property</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>FirstName</td>
+        <td><input type="text" name="FirstName" value="$!customer.FirstName"></td>
+    </tr>
+    <tr>
+        <td>LastName</td>
+        <td><input type="text" name="LastName" value="$!customer.LastName"></td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td><input type="text" name="Email" value="$!customer.Email"></td>
+    </tr>
+    <tr>
+        <td>Rep</td>
+        <td>$web.select('Employee', 'Email', $!web.param('EmployeeId'), false)</td>
+    </tr>
+    </tbody>
+</table>
+<button>Save</button>

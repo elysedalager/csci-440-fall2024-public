@@ -45,7 +45,6 @@ public class TracksController extends BaseController {
             } else {
                 tracks = Track.all(Web.getCurrentPage(), Web.PAGE_SIZE, orderBy);
             }
-            // TODO - implement cache of count w/ Redis
             long totalTracks = Track.count();
             return renderTemplate("templates/tracks/index.vm",
                     "tracks", tracks, "totalTracks", totalTracks);

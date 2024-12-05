@@ -14,7 +14,7 @@ public class BaseController {
     }
 
     protected static Integer asInt(String paramVal, Integer defaultVal) {
-        if (paramVal == null) {
+        if (paramVal == null || paramVal.isBlank()) {
             return defaultVal;
         } else {
             return Integer.parseInt(paramVal);

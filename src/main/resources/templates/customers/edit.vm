@@ -1,0 +1,9 @@
+#parse('templates/header.vm')
+
+<h1>Customer</h1>
+
+<form action="/customers/$customer.CustomerId" method="post">
+    #parse('templates/customers/form.vm')
+</form>
+
+#parse('templates/footer.vm')

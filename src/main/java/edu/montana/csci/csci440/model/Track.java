@@ -229,47 +229,48 @@ public class Track extends Model {
     public static List<Track> advancedSearch(int page, int count,
                                              String search, Integer artistId, Integer albumId,
                                              Integer maxRuntime, Integer minRuntime) {
-        try {
-            String sql = "SELECT *, Albums.Title AS AlbumTitle, Artists.Name AS ArtistName " +
-                    "FROM Tracks " +
-                    "JOIN Albums ON Tracks.AlbumId = Albums.AlbumId " +
-                    "JOIN Artists ON Albums.ArtistId = Artists.ArtistId " +
-                    "WHERE Tracks.Name LIKE ? ";
+        String sql = "SELECT tracks.*, albums.ArtistId " +
+                "FROM tracks " +
+                "JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                "WHERE name LIKE ? ";
 
-            ArrayList<Object> args = new ArrayList<>();
+        ArrayList<Object> args = new ArrayList<>();
+        args.add("%" + search + "%");
 
-            if (artistId != null){
-                sql += "AND Artists.ArtistId = ? ";
-                args.add(artistId);
-            }
-            if (albumId != null){
-                sql += "AND Albums.AlbumId = ? ";
-                args.add(albumId);
-            }
-            if (maxRuntime != null){
-                sql += "AND Milliseconds <= ? ";
-                args.add(maxRuntime);
-            }
-            if (minRuntime != null){
-                sql += "AND Milliseconds >= ? ";
-                args.add(minRuntime);
+        if (artistId != null){
+            sql += "AND albums.ArtistId = ? ";
+            args.add(artistId);
+        }
+        if (albumId != null){
+            sql += "AND albums.AlbumId = ? ";
+            args.add(albumId);
+        }
+        if (maxRuntime != null){
+            sql += "AND tracks.Milliseconds <= ? ";
+            args.add(maxRuntime);
+        }
+        if (minRuntime != null){
+            sql += "AND tracks.Milliseconds >= ? ";
+            args.add(minRuntime);
+        }
+
+        sql += "LIMIT ?";
+        args.add(count);
+
+        try(Connection connect = DB.connect();
+            PreparedStatement stmt = connect.prepareStatement(sql)) {
+
+            for (int i = 0; i < args.size(); i++){
+                Object arg = args.get(i);
+                stmt.setObject(i + 1, arg);
             }
 
-            try(Connection connect = DB.connect();
-                PreparedStatement stmt = connect.prepareStatement(sql)) {
-                ArrayList<Track> result = new ArrayList<>();
-                stmt.setString(1, "%" + search + "%");
-
-                for (int i = 0; i < args.size(); i++){
-                    Object arg = args.get(i);
-                    stmt.setObject(i + 2, arg);
-                }
-                ResultSet resultSet = stmt.executeQuery();
-                while (resultSet.next()) {
-                    result.add(new Track(resultSet));
-                }
-                return result;
+            ResultSet resultSet = stmt.executeQuery();
+            List<Track> results = new LinkedList<>();
+            while (resultSet.next()) {
+                results.add(new Track(resultSet));
             }
+            return results;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -283,10 +284,15 @@ public class Track extends Model {
                         "FROM Tracks " +
                         "JOIN Albums ON Tracks.AlbumId = Albums.AlbumId " +
                         "JOIN Artists ON Albums.ArtistId = Artists.ArtistId " +
-                        "WHERE name LIKE ? LIMIT ?")) {
+                        "WHERE Artists.name LIKE ? " +
+                                "OR Tracks.trackId LIKE ? " +
+                                "OR Albums.title LIKE ? " +
+                                "LIMIT ?")) {
                 ArrayList<Track> result = new ArrayList<>();
                 stmt.setString(1, "%" + search + "%");
-                stmt.setInt(2, count);
+                stmt.setString(2, "%" + search + "%");
+                stmt.setString(3, "%" + search + "%");
+                stmt.setInt(4, count);
                 ResultSet resultSet = stmt.executeQuery();
                 while (resultSet.next()) {
                     result.add(new Track(resultSet));
