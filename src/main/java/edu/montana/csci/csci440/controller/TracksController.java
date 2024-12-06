@@ -25,6 +25,7 @@ public class TracksController extends BaseController {
             track.setMilliseconds(Long.parseLong(req.queryParams("Milliseconds")));
             track.setBytes(Long.parseLong(req.queryParams("Bytes")));
             track.setUnitPrice(new BigDecimal(req.queryParams("UnitPrice")));
+            track.setAlbum(Album.find(Long.parseLong(req.queryParams("AlbumId"))));
             if (track.create()) {
                 Web.showMessage("Created A Track!");
                 return Web.redirect("/tracks/" + track.getTrackId());

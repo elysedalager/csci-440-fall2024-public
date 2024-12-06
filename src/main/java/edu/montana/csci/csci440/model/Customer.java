@@ -106,33 +106,6 @@ public class Customer extends Model {
         } catch (SQLException sqlException) {
             throw new RuntimeException("Error deleting customer", sqlException);
         }
-
-//        List<Invoice> invoices = this.getInvoices();
-//        for (Invoice i : invoices) {
-//            List<InvoiceItem> invoiceItems = i.getInvoiceItems();
-//            for (InvoiceItem iT : invoiceItems) {
-//                try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM invoice_items WHERE InvoiceId=?")) {
-//                    stmt.setLong(1, i.getInvoiceId());
-//                    stmt.executeUpdate();
-//                } catch (SQLException sqlException) {
-//                    throw new RuntimeException(sqlException);
-//                }
-//            }
-//
-//            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM invoices WHERE CustomerId=?")) {
-//                stmt.setLong(1, getCustomerId());
-//                stmt.executeUpdate();
-//            } catch (SQLException sqlException) {
-//                throw new RuntimeException(sqlException);
-//            }
-//        }
-//
-//        try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM customers WHERE CustomerId=?")) {
-//            stmt.setLong(1, getCustomerId());
-//            stmt.executeUpdate();
-//        } catch (SQLException sqlException) {
-//            throw new RuntimeException(sqlException);
-//        }
     }
 
     @Override

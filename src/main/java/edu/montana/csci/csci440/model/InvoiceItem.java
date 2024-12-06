@@ -27,10 +27,10 @@ public class InvoiceItem extends Model {
     }
 
     public Track getTrack() {
-        return null;
+        return Track.find(trackId);
     }
     public Invoice getInvoice() {
-        return null;
+        return invoice;
     }
 
     public Long getInvoiceLineId() {

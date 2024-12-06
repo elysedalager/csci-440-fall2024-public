@@ -125,13 +125,39 @@ public class Employee extends Model {
             }
         }
 
-        List<Employee> reports = this.getReports();
-        for(Employee e : reports) {
-            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM employees WHERE ReportsTo=?")) {
-                stmt.setLong(1, getEmployeeId());
-                stmt.executeUpdate();
-            } catch (SQLException sqlException) {
-                throw new RuntimeException(sqlException);
+//        List<Employee> reports = this.getReports();
+//        for(Employee e : reports) {
+//            try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("DELETE FROM employees WHERE ReportsTo=?")) {
+//                stmt.setLong(1, getEmployeeId());
+//                stmt.executeUpdate();
+//            } catch (SQLException sqlException) {
+//                throw new RuntimeException(sqlException);
+//            }
+//        }
+
+        // Get the boss of the employee being deleted (ReportsTo field)
+        Long bossId = null;
+        try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("SELECT ReportsTo FROM employees WHERE EmployeeId=?")) {
+            stmt.setLong(1, getEmployeeId());
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                bossId = resultSet.getLong("ReportsTo");
+            }
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+
+        // Update ReportsTo for employees who report to the employee being deleted
+        if (bossId != null) {
+            List<Employee> reports = this.getReports();
+            for (Employee e : reports) {
+                try (Connection conn = DB.connect(); PreparedStatement stmt = conn.prepareStatement("UPDATE employees SET ReportsTo=? WHERE EmployeeId=?")) {
+                    stmt.setLong(1, bossId);
+                    stmt.setLong(2, e.getEmployeeId());  // Set the employee's ID
+                    stmt.executeUpdate();
+                } catch (SQLException sqlException) {
+                    throw new RuntimeException(sqlException);
+                }
             }
         }
 
