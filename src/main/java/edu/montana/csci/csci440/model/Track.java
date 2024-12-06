@@ -105,10 +105,10 @@ public class Track extends Model {
     }
 
     public MediaType getMediaType() {
-        return null;
+        return MediaType.find(mediaTypeId);
     }
     public Genre getGenre() {
-        return null;
+        return Genre.find(genreId);
     }
     public List<Playlist> getPlaylists(){
         try {
@@ -217,12 +217,6 @@ public class Track extends Model {
         if (albumId == null) {
             _errors.add("AlbumId is required");
         }
-        if (getMilliseconds() == null) {
-            _errors.add("Milliseconds is required");
-        }
-        if (getUnitPrice() == null) {
-            _errors.add("UnitPrice is required");
-        }
         return _errors.isEmpty();
     }
 
@@ -309,12 +303,14 @@ public class Track extends Model {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
-                         "INSERT INTO tracks (Name, MediaTypeId, AlbumId, Milliseconds, UnitPrice) VALUES (?, ?, ?, ?, ?)")) {
+                         "INSERT INTO tracks (Name, Milliseconds, Bytes, UnitPrice, AlbumId, MediaTypeId, GenreId) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
                 stmt.setString(1, this.getName());
-                stmt.setLong(2, this.getMediaTypeId());
-                stmt.setLong(3, this.getAlbumId());
-                stmt.setLong(4, this.getMilliseconds());
-                stmt.setBigDecimal(5, this.getUnitPrice());
+                stmt.setLong(2, this.getMilliseconds());
+                stmt.setLong(3, this.getBytes());
+                stmt.setBigDecimal(4, this.getUnitPrice());
+                stmt.setLong(5, this.getAlbumId());
+                stmt.setLong(6, this.getMediaTypeId());
+                stmt.setLong(7, this.getGenreId());
                 stmt.executeUpdate();
                 this.trackId = DB.getLastID(conn);
 

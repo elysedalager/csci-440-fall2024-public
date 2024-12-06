@@ -1,6 +1,7 @@
 package edu.montana.csci.csci440.controller;
 
 import edu.montana.csci.csci440.model.Artist;
+import edu.montana.csci.csci440.model.MediaType;
 import edu.montana.csci.csci440.model.Track;
 import edu.montana.csci.csci440.util.Web;
 import edu.montana.csci.csci440.model.Album;
@@ -26,6 +27,8 @@ public class TracksController extends BaseController {
             track.setBytes(Long.parseLong(req.queryParams("Bytes")));
             track.setUnitPrice(new BigDecimal(req.queryParams("UnitPrice")));
             track.setAlbum(Album.find(Long.parseLong(req.queryParams("AlbumId"))));
+            track.setMediaTypeId(Long.parseLong(req.queryParams("MediaTypeId")));
+            track.setGenreId(Long.parseLong(req.queryParams("GenreId")));
             if (track.create()) {
                 Web.showMessage("Created A Track!");
                 return Web.redirect("/tracks/" + track.getTrackId());
