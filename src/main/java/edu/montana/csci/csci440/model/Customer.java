@@ -118,6 +118,7 @@ public class Customer extends Model {
                 stmt.setString(2, this.getLastName());
                 stmt.setString(3, this.getEmail());
                 stmt.setLong(4, this.getSupportRepId());
+                stmt.setLong(5, getCustomerId());
                 stmt.executeUpdate();
                 return true;
             } catch (SQLException sqlException) {
